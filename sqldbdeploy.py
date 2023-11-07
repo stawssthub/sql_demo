@@ -27,4 +27,4 @@ def execute_sql_files(mysql):
 
 # Example usage
 for db in databases:
-execute_sql_files("mysql/**.sql", db) # Change directory path as needed
+execute_sql_files("mysql/", db) # Change directory path as needed
