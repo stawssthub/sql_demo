@@ -1,4 +1,4 @@
-name: Incremental SQL Deployment
+name: Incremental SQL Deployment2
 
 on:
   push:
