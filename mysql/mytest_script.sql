@@ -2,7 +2,7 @@
 
 USE sql12659958;
 
-CREATE TABLE customer (
+CREATE TABLE deployed_scripts (
   id INT,
   custname VARCHAR(100)
 );
