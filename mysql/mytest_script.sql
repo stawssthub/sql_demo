@@ -1,6 +1,6 @@
-CREATE DATABASE db_test;
 
-USE db_test;
+
+USE sql12659958;
 
 CREATE TABLE customer (
   id INT,
