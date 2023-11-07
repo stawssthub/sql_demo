@@ -26,5 +26,3 @@ def execute_sql_files(mysql):
     conn.close()
 
 # Example usage
-for db in databases:
-execute_sql_files("mysql/", db) # Change directory path as needed
