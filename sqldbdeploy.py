@@ -18,7 +18,7 @@ def execute_sql_files(directory_path):
     cursor = conn.cursor()
 
     for filename in os.listdir(directory_path):
-        if filename.endswith("**.sql"):
+        if filename.endswith(".sql"):
             with open(os.path.join(directory_path, filename), "r") as file:
                 sql_script = file.read()
                 cursor.execute(sql_script)
