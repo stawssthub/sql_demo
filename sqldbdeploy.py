@@ -26,4 +26,4 @@ def execute_sql_files(directory):
     conn.close()
 
 # Example usage
-execute_sql_files("sql_scripts/schema/") # Change directory path as needed
+execute_sql_files("mysql/") # Change directory path as needed
