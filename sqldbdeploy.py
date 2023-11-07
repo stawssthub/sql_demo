@@ -12,13 +12,13 @@ db_params = {
 }
 
 # Function to execute SQL files
-def execute_sql_files(directory):
+def execute_sql_files(mysql):
     conn = mysql.connector.connect(**db_params)
     cursor = conn.cursor()
 
-    for filename in os.listdir(directory):
+    for filename in os.listdir(mysql):
         if filename.endswith(".sql"):
-            with open(os.path.join(directory, filename), "r") as file:
+            with open(os.path.join(mysql, filename), "r") as file:
                 sql_script = file.read()
                 cursor.execute(sql_script)
 
