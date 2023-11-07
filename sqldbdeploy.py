@@ -20,7 +20,7 @@ def execute_sql_files(mysql):
         if filename.endswith("**.sql"):
             with open(os.path.join(mysql, filename), "r") as file:
                 sql_script = file.read()
-                db.execute(sql_script)
+                cursor.execute(sql_script)
 
     conn.commit()
     conn.close()
