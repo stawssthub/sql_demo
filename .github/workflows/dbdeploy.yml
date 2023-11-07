@@ -12,5 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    - name: Install the SQL client (e.g., MySQL or PostgreSQL)
+      run: |
+          sudo apt-get install mysql-client
+          
     - name: Show databases
       run: mysql -h 127.0.0.1 --port 3306 -u root -p${{ secrets.DB_PASSWORD }} -e "SHOW DATABASES";
