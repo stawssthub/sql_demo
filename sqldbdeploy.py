@@ -12,7 +12,7 @@ db_params = {
 }
 
 # Function to execute SQL files
-directory_path = "mysql/":
+directory_path = "mysql/"
 def execute_sql_files(directory_path):
     conn = mysql.connector.connect(**db_params)
     cursor = conn.cursor()
