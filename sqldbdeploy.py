@@ -16,7 +16,7 @@ connection = mysql.connector.connect(**db_params)
 cursor = connection.cursor()
 
 # Directory containing SQL scripts
-sql_script_dir = "hawthorn"  # Replace with your actual directory path
+sql_script_dir = "mysql"  # Replace with your actual directory path
 
 # Get a list of all SQL files in the directory
 sql_files = glob.glob(os.path.join(sql_script_dir, "**.sql"))
