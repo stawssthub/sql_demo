@@ -17,7 +17,7 @@ def execute_sql_files(mysql):
     cursor = conn.cursor()
 
     for filename in os.listdir(mysql):
-        if filename.endswith(".sql"):
+        if filename.endswith("**.sql"):
             with open(os.path.join(mysql, filename), "r") as file:
                 sql_script = file.read()
                 db.execute(sql_script)
