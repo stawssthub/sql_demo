@@ -13,4 +13,4 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Show databases
-      run: mysql -h 127.0.0.1 --port 3306 -u sunil.talluri -p${{ secrets.DB_PASSWORD }} -e "SHOW DATABASES";
+      run: mysql -h 127.0.0.1 --port 3306 -u root -p${{ secrets.DB_PASSWORD }} -e "SHOW DATABASES";
