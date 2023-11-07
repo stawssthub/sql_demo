@@ -7,7 +7,7 @@ CREATE TABLE customer3 (
   custnames VARCHAR(100)
 );
 
-INSERT INTO customer3 (id, custname) VALUES
+INSERT INTO customer3 (emp_id, custnames) VALUES
 (1, 'ABC Co'),
 (2, 'XYZ Corp'),
 (3, 'BN Plumbing');
