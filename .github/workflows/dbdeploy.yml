@@ -1,20 +1,31 @@
 name: Incremental SQL Deployment
 
-run-name: Setting up the Hawthorn database
-on: [push]
+on:
+  push:
+    branches:
+      - main  # Replace with your branch name
+
 jobs:
-  test-output:
+  deploy_to_dev:
     runs-on: ubuntu-latest
+
     steps:
-    - name: Test Output
-      run: echo "Here is a test"
-  connect-db:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - name: Install the SQL client (e.g., MySQL or PostgreSQL)
-      run: |
-          sudo apt-get install mysql-client
-          
-    - name: Show databases
-      run: mysql -h 127.0.0.1 --port 3306 -u root -p${{ secrets.DB_PASSWORD }} -e "SHOW DATABASES";
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x  # Replace with the desired Python version
+
+      - name: Install dependencies
+        run: pip install mysql-connector-python # Install necessary Python libraries
+
+      - name: Deploy SQL Scripts
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        run: python sqldbdeploy.py
