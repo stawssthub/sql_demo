@@ -24,12 +24,12 @@ sql_files = glob.glob(os.path.join(sql_script_dir, "**.sql"))
 # Check if a script has already been deployed and deploy if not
 for script in sql_files:
     script_name = os.path.basename(script)
-    cursor.execute("SELECT script_name FROM deployed_scripts WHERE script_name = %s", (ID,))
+    cursor.execute("SELECT script_name FROM deployed_scripts WHERE script_name = %s", (name,))
     if not cursor.fetchone():
         with open(script, "r") as file:
             sql = file.read()
         cursor.execute(sql)
-        cursor.execute("INSERT INTO deployed_scripts (script_name) VALUES (%s)", (ID,))
+        cursor.execute("INSERT INTO deployed_scripts (script_name) VALUES (%s)", (name,))
 
 # Commit the changes and close the connection
 connection.commit()
