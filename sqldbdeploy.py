@@ -3,7 +3,7 @@ import mysql.connector
 import glob
 
 # Database connection parameters
-db_params = {
+databases = {
     "host": os.getenv("DB_HOST"),
     "port": os.getenv("DB_PORT"),
     "database": os.getenv("DB_NAME"),
@@ -11,27 +11,26 @@ db_params = {
     "password": os.getenv("DB_PASSWORD"),
 }
 
-# Establish a database connection
-connection = mysql.connector.connect(**db_params)
-cursor = connection.cursor()
+# Function to execute SQL files for a specific database
+def execute_sql_files(directory, database):
+    connection = mysql.connector.connect(
+        host=database["host"],
+        user=database["user"],
+        password=database["password"],
+        database=database["name"]
+    )
 
-# Directory containing SQL scripts
-sql_script_dir = "mysql"  # Replace with your actual directory path
+    cursor = connection.cursor()
 
-# Get a list of all SQL files in the directory
-sql_files = glob.glob(os.path.join(sql_script_dir, "**.sql"))
+    for filename in os.listdir(directory):
+        if filename.endswith(".sql"):
+            with open(os.path.join(directory, filename), "r") as file:
+                sql_script = file.read()
+                cursor.execute(sql_script)
 
-# Check if a script has already been deployed and deploy if not
-for script in sql_files:
-    script_name = os.path.basename(script)
-    cursor.execute("SELECT script_name FROM deployed_scripts WHERE script_name = %s", (name,))
-    if not cursor.fetchone():
-        with open(script, "r") as file:
-            sql = file.read()
-        cursor.execute(sql)
-        cursor.execute("INSERT INTO deployed_scripts (script_name) VALUES (%s)", (name,))
+    connection.commit()
+    connection.close()
 
-# Commit the changes and close the connection
-connection.commit()
-cursor.close()
-connection.close()
+# Example usage
+for db in databases:
+    execute_sql_files("sql_scripts/schema/", db) # Change directory path as needed
