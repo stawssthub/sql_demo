@@ -21,7 +21,7 @@ def execute_sql_files(directory_path):
         if filename.endswith(".sql"):
             with open(os.path.join(directory_path, filename), "r") as file:
                 sql_script = file.read()
-                 print(sql_script)
+                 print("sql_script")
                 cursor.execute(sql_script)
            
 
