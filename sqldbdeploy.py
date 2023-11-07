@@ -12,7 +12,7 @@ db_params = {
 }
 
 # Function to execute SQL files
-def execute_sql_files("mysql/"):
+def execute_sql_files(mysql/):
     conn = mysql.connector.connect(**db_params)
     cursor = conn.cursor()
 
