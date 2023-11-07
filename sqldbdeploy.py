@@ -3,7 +3,7 @@ import mysql.connector
 import glob
 
 # Database connection parameters
-databases = {
+db_params = {
     "host": os.getenv("DB_HOST"),
     "port": os.getenv("DB_PORT"),
     "database": os.getenv("DB_NAME"),
@@ -11,16 +11,10 @@ databases = {
     "password": os.getenv("DB_PASSWORD"),
 }
 
-# Function to execute SQL files for a specific database
-def execute_sql_files(directory, database):
-    connection = mysql.connector.connect(
-        host=database["host"],
-        user=database["user"],
-        password=database["password"],
-        database=database["name"]
-    )
-
-    cursor = connection.cursor()
+# Function to execute SQL files
+def execute_sql_files(directory):
+    conn = mysql.connector.connect(**db_params)
+    cursor = conn.cursor()
 
     for filename in os.listdir(directory):
         if filename.endswith(".sql"):
@@ -28,9 +22,8 @@ def execute_sql_files(directory, database):
                 sql_script = file.read()
                 cursor.execute(sql_script)
 
-    connection.commit()
-    connection.close()
+    conn.commit()
+    conn.close()
 
 # Example usage
-for db in databases:
-    execute_sql_files("sql_scripts/schema/", db) # Change directory path as needed
+execute_sql_files("sql_scripts/schema/") # Change directory path as needed
