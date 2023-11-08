@@ -1,9 +1,9 @@
-name: Incremental SQL Deployment test3
+name: Incremental SQL Deployment test4
 
 on:
   push:
     branches:
-      - test3  # Replace with your branch name
+      - test4  # Replace with your branch name
 
 jobs:
   deploy_to_dev:
