@@ -29,7 +29,7 @@ for x in cursor:
 #cursor.execute("ALTER TABLE customers ADD COLUMN id INT AUTO_INCREMENT PRIMARY KEY")
 #cursor.execute("CREATE TABLE customers2 (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), address VARCHAR(255))")
 
-directory_path = "mysql/"
+directory_path = "mysql"
 
 # read the  .sql file
 for filename in os.listdir(directory_path):
