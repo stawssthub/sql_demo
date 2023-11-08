@@ -39,7 +39,9 @@ for filename in os.listdir(directory_path):
 # Read the SQL script from the file
 with open(script_paths, 'r') as sql_file:
     sql_script = sql_file.read()
+    
     cursor.execute(sql_script)
+    
     #result_iterator = cursor.execute(sql_file.read())
     #print(result_iterator)
     #for res in result_iterator:
