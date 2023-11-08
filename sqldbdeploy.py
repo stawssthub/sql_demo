@@ -15,5 +15,10 @@ db_params = {
 connection = mysql.connector.connect(**db_params)
 cursor = connection.cursor()
 
-cursor.execute("CREATE TABLE customers (name VARCHAR(255), address VARCHAR(255))")
+cursor.execute("SHOW TABLES")
+
+for x in cursor:
+  print(x)
+    
+#cursor.execute("CREATE TABLE customers (name VARCHAR(255), address VARCHAR(255))")
 cursor.execute("ALTER TABLE customers ADD COLUMN id INT AUTO_INCREMENT PRIMARY KEY")
