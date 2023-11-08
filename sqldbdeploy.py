@@ -13,7 +13,7 @@ db_params = {
 }
 
 last_commit_sha = subprocess.check_output("git rev-parse HEAD", shell=True).decode("utf-8").strip()
-changed_files = glob.glob('*.sql')
+changed_files = glob.glob('**.sql')
 
 # Iterate through the list of changed SQL files and print them
 for file in changed_files:
