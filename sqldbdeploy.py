@@ -1,4 +1,5 @@
 import os
+import subprocess
 import mysql.connector
 import glob
 
@@ -32,19 +33,16 @@ for x in cursor:
 directory_path = "mysql/"
 try:
     cursor.execute("START TRANSACTION")
-# read the  .sql file
-    for filename in os.listdir(directory_path):
-        if filename.endswith(".sql"):
-            script_paths = os.path.join(directory_path, filename)
-            print(f"Processing: {script_paths}")
-# Read the SQL script from the file
-            with open(script_paths, 'r') as sql_file:
-                result_iterator = cursor.execute(sql_file.read(), multi=True)
-                print(result_iterator)
-            for res in result_iterator:
-                print("Running query: ", res)  # Will print out a short representation of the query
-                print(f"Affected {res.rowcount} rows" )
- 
+# Use Git to get the list of changed SQL files
+git_command = "git diff --name-only HEAD~1 HEAD -- '*.sql'"
+changed_files = subprocess.check_output(git_command, shell=True).decode("utf-8").strip().split("\n")
+
+for filename in changed_files:
+    script_path = os.path.join(directory_path, filename)
+
+    with open(script_path, 'r') as script_file:
+        sql_script = script_file.read()
+        
 # commit the changes to the database 
     connection.commit() 
 except Exception as e:
