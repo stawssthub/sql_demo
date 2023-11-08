@@ -52,6 +52,6 @@ except Exception as e:
     connection.rollback()
     print(f"Error: {e}")
 finally:
-# close the cursor and connection 
+# close the cursor and connection. 
     cursor.close() 
     connection.close() 
