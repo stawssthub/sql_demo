@@ -29,4 +29,17 @@ for x in cursor:
 #cursor.execute("ALTER TABLE customers ADD COLUMN id INT AUTO_INCREMENT PRIMARY KEY")
 #cursor.execute("CREATE TABLE customers2 (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), address VARCHAR(255))")
 
-cursor.execute(test_script.sql)
+# read the contents of the .sql file
+with open('mysql/test_script.sql', 'r') as file: 
+    sql_script = file.read()
+
+# execute the script using the cursor object 
+for result in cursor.execute(sql_script, multi=True): 
+    pass 
+ 
+# commit the changes to the database 
+cnx.commit() 
+ 
+# close the cursor and connection 
+cursor.close() 
+cnx.close() 
