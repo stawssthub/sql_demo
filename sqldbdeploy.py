@@ -37,7 +37,7 @@ for x in cursor:
 #cursor.execute("ALTER TABLE customers ADD COLUMN id INT AUTO_INCREMENT PRIMARY KEY")
 #cursor.execute("CREATE TABLE customers2 (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), address VARCHAR(255))")
 
-directory_path = "mysql/"
+#directory_path = "mysql/"
 #try:
     #cursor.execute("START TRANSACTION")
 # Use Git to get the list of changed SQL files
@@ -47,8 +47,8 @@ directory_path = "mysql/"
 #changed_files = subprocess.check_output(f"git diff --name-only HEAD~1 {last_commit_sha} -- '*.sql'", shell=True).decode("utf-8").strip().split("\n")
 #changed_files = glob.glob('*.sql')
 
-for filename in changed_files:
-    script_path = os.path.join(directory_path, filename)
+for file in changed_files:
+    #script_path = os.path.join(directory_path, filename)
 
     with open(file, "r") as sql_file:
         sql_statements = sql_file.read().split(';')  # Split SQL statements by semicolon
