@@ -13,7 +13,7 @@ db_params = {
 }
 
 last_commit_sha = subprocess.check_output("git rev-parse HEAD", shell=True).decode("utf-8").strip()
-changed_files = glob.glob('**.sql')
+changed_files = glob.glob('mysql/*.sql')
 
 # Iterate through the list of changed SQL files and print them
 for file in changed_files:
@@ -37,7 +37,7 @@ for x in cursor:
 #cursor.execute("ALTER TABLE customers ADD COLUMN id INT AUTO_INCREMENT PRIMARY KEY")
 #cursor.execute("CREATE TABLE customers2 (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), address VARCHAR(255))")
 
-directory_path = "mysql/"
+#directory_path = "mysql/"
 #try:
     #cursor.execute("START TRANSACTION")
 # Use Git to get the list of changed SQL files
