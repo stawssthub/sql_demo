@@ -11,8 +11,8 @@ db_params = {
     "password": os.getenv("DB_PASSWORD"),
 }
 
-# Function to execute SQL files
-    conn = mysql.connector.connect(**db_params)
-    cursor = conn.cursor()
+# Establish a database connection
+connection = mysql.connector.connect(**db_params)
+cursor = connection.cursor()
 
-    cursor.execute("CREATE TABLE customers (name VARCHAR(255), address VARCHAR(255))")
+cursor.execute("CREATE TABLE customers (name VARCHAR(255), address VARCHAR(255))")
