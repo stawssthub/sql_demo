@@ -12,20 +12,7 @@ db_params = {
 }
 
 # Function to execute SQL files
-directory_path = "mysql/"
-def execute_sql_files(directory_path):
     conn = mysql.connector.connect(**db_params)
     cursor = conn.cursor()
 
-    for filename in os.listdir(directory_path):
-        if filename.endswith(".sql"):
-            with open(os.path.join(directory_path, filename), "r") as file:
-                sql_script = file.read()
-                print(sql_scrip)
-                cursor.execute(sql_script)
-           
-
-    conn.commit()
-    conn.close()
-print("deployment completed")
-# Example usage
+    cursor.execute("CREATE TABLE customers (name VARCHAR(255), address VARCHAR(255))")
