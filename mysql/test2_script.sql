@@ -9,4 +9,4 @@ CREATE TABLE test_table2(
 INSERT INTO test_table2(test_field) VALUES('test1');
 INSERT INTO test_table2(test_field) VALUES('test2');
 INSERT INTO test_table2(test_field) VALUES('test3');
-INSERT INTO test_table2(test_fields) VALUES('test4');
+INSERT INTO test_table2(test_fields) VALUES('test55');
