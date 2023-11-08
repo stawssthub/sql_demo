@@ -1,11 +1,11 @@
 USE sql12659958;
 
-CREATE TABLE customer4 (
-  id INT,
-  custname VARCHAR(100)
+CREATE TABLE test_table(
+        id INT PRIMARY KEY AUTO_INCREMENT,
+        test_field VARCHAR(250) NOT NULL DEFAULT ''
 );
 
-INSERT INTO customer4 (id, custname) VALUES
-(1, 'cBC Co'),
-(2, 'cYZ Corp'),
-(3, 'cN Plumbing');
+
+INSERT INTO test_table(test_field) VALUES('test1');
+INSERT INTO test_table(test_field) VALUES('test2');
+INSERT INTO test_table(test_field) VALUES('test3');
