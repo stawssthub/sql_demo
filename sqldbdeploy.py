@@ -2,6 +2,7 @@ import os
 import subprocess
 import mysql.connector
 import glob
+import git
 
 # Database connection parameters
 db_params = {
@@ -12,12 +13,12 @@ db_params = {
     "password": os.getenv("DB_PASSWORD"),
 }
 
-last_commit_sha = subprocess.check_output("git rev-parse HEAD", shell=True).decode("utf-8").strip()
-changed_files = glob.glob('mysql/*.sql')
+#last_commit_sha = subprocess.check_output("git rev-parse HEAD", shell=True).decode("utf-8").strip()
+#changed_files = glob.glob('mysql/*.sql')
 
 # Iterate through the list of changed SQL files and print them
-for file in changed_files:
-    print(file)
+#for file in changed_files:
+    #print(file)
     
 # Establish a database connection
 connection = mysql.connector.connect(**db_params)
@@ -42,9 +43,12 @@ for x in cursor:
     #cursor.execute("START TRANSACTION")
 # Use Git to get the list of changed SQL files
 #git_command = git diff --name-only HEAD~1 HEAD -- '*.sql'
-#last_commit_sha = subprocess.check_output("git rev-parse HEAD", shell=True).decode("utf-8").strip()
+
+last_commit_sha = subprocess.check_output("git rev-parse HEAD", shell=True).decode("utf-8").strip()
+
 #changed_files = subprocess.check_output(git_command, shell=True).decode("utf-8").strip().split("\n")
-#changed_files = subprocess.check_output(f"git diff --name-only HEAD~1 {last_commit_sha} -- '*.sql'", shell=True).decode("utf-8").strip().split("\n")
+
+changed_files = subprocess.check_output(f"git diff --name-only HEAD~1 {last_commit_sha} -- '*.sql'", shell=True).decode("utf-8").strip().split("\n")
 #changed_files = glob.glob('*.sql')
 
 for file in changed_files:
