@@ -2,7 +2,6 @@ import os
 import subprocess
 import mysql.connector
 import glob
-import git
 
 # Database connection parameters
 db_params = {
