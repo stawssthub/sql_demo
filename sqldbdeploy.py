@@ -34,7 +34,7 @@ directory_path = "mysql/"
 #try:
     #cursor.execute("START TRANSACTION")
 # Use Git to get the list of changed SQL files
-git_command = "git diff --name-only HEAD~1 HEAD -- '*.sql'"
+git_command = git diff --name-only HEAD~1 HEAD -- '*.sql'
 changed_files = subprocess.check_output(git_command, shell=True).decode("utf-8").strip().split("\n")
 
 for filename in changed_files:
