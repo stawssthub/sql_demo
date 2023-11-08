@@ -27,5 +27,5 @@ def execute_sql_files(directory_path):
 
     conn.commit()
     conn.close()
-
+print("deployment completed")
 # Example usage
