@@ -15,7 +15,7 @@ db_params = {
 connection = mysql.connector.connect(**db_params)
 cursor = connection.cursor()
 
-cursor.execute("SH DATABASES")
+cursor.execute("SHOW DATABASES")
 
 for D in cursor:
   print(D)
