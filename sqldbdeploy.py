@@ -35,7 +35,7 @@ directory_path = "mysql/"
 for filename in os.listdir(directory_path):
     if filename.endswith(".sql"):
         script_paths = os.path.join(directory_path, filename)
-        
+        print(f"Processing: {script_paths}")
 # Read the SQL script from the file
 with open(script_paths, 'r') as sql_file:
     result_iterator = cursor.execute(sql_file.read(), multi=True)
