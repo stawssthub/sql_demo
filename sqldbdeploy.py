@@ -39,11 +39,11 @@ try:
             print(f"Processing: {script_paths}")
 # Read the SQL script from the file
             with open(script_paths, 'r') as sql_file:
-            result_iterator = cursor.execute(sql_file.read(), multi=True)
-            print(result_iterator)
+                result_iterator = cursor.execute(sql_file.read(), multi=True)
+                print(result_iterator)
             for res in result_iterator:
-            print("Running query: ", res)  # Will print out a short representation of the query
-            print(f"Affected {res.rowcount} rows" )
+                print("Running query: ", res)  # Will print out a short representation of the query
+                print(f"Affected {res.rowcount} rows" )
  
 # commit the changes to the database 
     connection.commit() 
