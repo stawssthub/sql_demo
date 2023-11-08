@@ -12,6 +12,8 @@ db_params = {
     "password": os.getenv("DB_PASSWORD"),
 }
 
+last_commit_sha = subprocess.check_output("git rev-parse HEAD", shell=True).decode("utf-8").strip()
+changed_files = glob.glob('*.sql')
 # Establish a database connection
 connection = mysql.connector.connect(**db_params)
 cursor = connection.cursor()
@@ -35,17 +37,19 @@ directory_path = "mysql/"
     #cursor.execute("START TRANSACTION")
 # Use Git to get the list of changed SQL files
 #git_command = git diff --name-only HEAD~1 HEAD -- '*.sql'
-last_commit_sha = subprocess.check_output("git rev-parse HEAD", shell=True).decode("utf-8").strip()
+#last_commit_sha = subprocess.check_output("git rev-parse HEAD", shell=True).decode("utf-8").strip()
 #changed_files = subprocess.check_output(git_command, shell=True).decode("utf-8").strip().split("\n")
 #changed_files = subprocess.check_output(f"git diff --name-only HEAD~1 {last_commit_sha} -- '*.sql'", shell=True).decode("utf-8").strip().split("\n")
-changed_files = glob.glob('*.sql')
+#changed_files = glob.glob('*.sql')
 
 for filename in changed_files:
     script_path = os.path.join(directory_path, filename)
 
-    with open(script_path, 'r') as script_file:
-        sql_script = script_file.read()
-        
+    with open(file, "r") as sql_file:
+        sql_statements = sql_file.read().split(';')  # Split SQL statements by semicolon
+        for sql_statement in sql_statements:
+        # Execute the SQL statement against the database
+            cursor.execute(sql_statement)
 # commit the changes to the database 
     connection.commit() 
 #except Exception as e:
