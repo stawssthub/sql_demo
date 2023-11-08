@@ -38,8 +38,8 @@ for result in cursor.execute(sql_script, multi=True):
     pass 
  
 # commit the changes to the database 
-cnx.commit() 
+connection.commit() 
  
 # close the cursor and connection 
 cursor.close() 
-cnx.close() 
+connection.close() 
