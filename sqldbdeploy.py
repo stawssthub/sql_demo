@@ -49,7 +49,7 @@ with open(script_paths, 'r') as sql_file:
         #print(f"Affected {res.rowcount} rows" )
  
 # commit the changes to the database 
-connection.commit() 
+#connection.commit() 
  
 # close the cursor and connection 
 cursor.close() 
