@@ -51,7 +51,8 @@ print(f"Executing command: {git_command}")
 
 changed_files = subprocess.check_output(git_command, shell=True).decode("utf-8").strip().split("\n")
 
-
+for file in changed_files:
+    
 with open(file, "r") as sql_file:
         #sql_statements = sql_file.read().split(';')  # Split SQL statements by semicolon
     result_iterator = cursor.execute(sql_file.read(), multi=True)
