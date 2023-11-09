@@ -1,8 +1,8 @@
 USE sql12659958;
 
 #CREATE TABLE test_table2(
-        3id INT PRIMARY KEY AUTO_INCREMENT,
-        3test_field VARCHAR(250) NOT NULL DEFAULT ''
+        #3id INT PRIMARY KEY AUTO_INCREMENT,
+        #3test_field VARCHAR(250) NOT NULL DEFAULT ''
 #);
 
 
