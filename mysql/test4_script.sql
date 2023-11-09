@@ -8,4 +8,4 @@ CREATE TABLE test_table4(
 
 INSERT INTO test_table4(test_field) VALUES('test1');
 INSERT INTO test_table4(test_field) VALUES('test2');
-INSERT INTO test_table4(test_field) VALUES('test3');
+INSERT INTO test_table4(test_field) VALUES('test4');
