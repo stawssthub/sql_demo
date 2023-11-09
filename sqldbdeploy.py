@@ -44,7 +44,7 @@ for x in cursor:
 # Use Git to get the list of changed SQL files
 #git_command = git diff --name-only HEAD~1 HEAD -- '*.sql'
 
-last_commit_sha = subprocess.check_output("git rev-parse HEAD", shell=false).decode("utf-8").strip()
+last_commit_sha = subprocess.check_output("git rev-parse HEAD", shell=False).decode("utf-8").strip()
 
 print(f"last_commit: {last_commit_sha}")
 
