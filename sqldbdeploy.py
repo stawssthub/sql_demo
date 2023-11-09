@@ -45,7 +45,7 @@ try:
                 print("Running query: ", res)  # Will print out a short representation of the query
                 print(f"Affected {res.rowcount} rows" )
  
-# commit the changes to the database 
+# commit the changes to the database.
     connection.commit() 
 except Exception as e:
     # Handle exceptions, roll back the transaction, and log the error
