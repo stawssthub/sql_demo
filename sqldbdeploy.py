@@ -54,8 +54,8 @@ changed_files = subprocess.check_output(git_command, shell=True).decode("utf-8")
 
 with open(file, "r") as sql_file:
         #sql_statements = sql_file.read().split(';')  # Split SQL statements by semicolon
-        result_iterator = cursor.execute(sql_file.read(), multi=True)
-        print(result_iterator)
+    result_iterator = cursor.execute(sql_file.read(), multi=True)
+    print(result_iterator)
     for res in result_iterator:
         print("Running query: ", res)  # Will print out a short representation of the query
         print(f"Affected {res.rowcount} rows" )
