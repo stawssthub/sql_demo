@@ -51,12 +51,14 @@ print(f"Executing command: {git_command}")
 
 changed_files = subprocess.check_output(git_command, shell=True).decode("utf-8").strip().split("\n")
 
-for file in changed_files:
-    with open(file, "r") as sql_file:
-        sql_statements = sql_file.read().split(';')  # Split SQL statements by semicolon
-        for sql_statement in sql_statements:
-        # Execute the SQL statement against the database
-            cursor.execute(sql_statement)
+
+ with open(file, "r") as sql_file:
+        #sql_statements = sql_file.read().split(';')  # Split SQL statements by semicolon
+        result_iterator = cursor.execute(sql_file.read(), multi=True)
+        print(result_iterator)
+    for res in result_iterator:
+        print("Running query: ", res)  # Will print out a short representation of the query
+        print(f"Affected {res.rowcount} rows" )
             
 # commit the changes to the database 
     connection.commit() 
