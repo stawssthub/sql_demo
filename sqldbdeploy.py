@@ -36,8 +36,8 @@ for x in cursor:
     
 
 #directory_path = "mysql/"
-#try:
-    #cursor.execute("START TRANSACTION")
+try:
+    cursor.execute("START TRANSACTION")
 # Use Git to get the list of changed SQL files
 #git_command = git diff --name-only HEAD~1 HEAD -- '*.sql'
 
@@ -63,8 +63,16 @@ for file in changed_files:
             
 # commit the changes to the database 
     connection.commit() 
-    
 
+except Exception as e:
+
+    # Handle exceptions, roll back the transaction, and log the error
+
+    connection.rollback()
+    print(f"Error: {e}")  
+
+finally:
+    
 # close the cursor and connection 
     cursor.close() 
     connection.close() 
