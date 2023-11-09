@@ -27,6 +27,16 @@ cursor.execute("SHOW TABLES")
 for x in cursor:
   print(x)
 
+try:
+    changed_files = subprocess.check_output(['git', 'diff', '--name-only', 'HEAD~1..HEAD', '--', '*.sql'], text=True).splitlines()
+except subprocess.CalledProcessError as e:
+    if e.returncode == 128:
+        # No changes in '*.sql' files
+        changed_files = []
+    else:
+        # Handle other errors
+        raise
+
 # Step 1: Identify changed SQL files
 changed_files = subprocess.check_output(['git', 'diff', '--name-only', 'HEAD~1..HEAD', '--', '*.sql'], text=True).splitlines()
 
