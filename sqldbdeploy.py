@@ -27,25 +27,14 @@ cursor.execute("SHOW TABLES")
 for x in cursor:
   print(x)
 
-try:
-    changed_files = subprocess.check_output(['git', 'diff', '--name-only', 'HEAD~1..HEAD', '--', '*.sql'], text=True).splitlines()
-except subprocess.CalledProcessError as e:
-    if e.returncode == 128:
-        # No changes in '*.sql' files
-        changed_files = []
-    else:
-        # Handle other errors
-        raise
+    changed_files = subprocess.check_output(['git', 'diff', '--name-only', 'HEAD^', 'HEAD'], universal_newlines=True)
+    changed_files = [file.strip() for file in changed_files.split('\n') if file.endswith(".sql")]
 
-# Step 1: Identify changed SQL files
-#changed_files = subprocess.check_output(['git', 'diff', '--name-only', 'HEAD~1..HEAD', '--', '*.sql'], text=True).splitlines()
+    for file_path in changed_files:
+        deploy_sql_changes(cursor, file_path)
 
-# Step 2: Execute changed SQL files
-for file in changed_files:
-    with open(file, 'r') as sql_file:
-        sql_script = sql_file.read()
-        cursor.execute(sql_script)
-        connection.commit()
+    # Commit changes
+    connection.commit()
 
 cursor.close()
 connection.close()
