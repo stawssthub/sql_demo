@@ -19,7 +19,7 @@ jobs:
           python-version: 3.x  # Replace with the desired Python version
 
       - name: Install dependencies
-        run: pip install mysql-connector-python # Install necessary Python libraries
+        run: pip install mysql-connector-python git # Install necessary Python libraries
 
       - name: Deploy SQL Scripts
         env:
