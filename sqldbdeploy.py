@@ -36,8 +36,7 @@ for x in cursor:
     
 
 #directory_path = "mysql/"
-try:
-    cursor.execute("START TRANSACTION")
+
 # Use Git to get the list of changed SQL files
 #git_command = git diff --name-only HEAD~1 HEAD -- '*.sql'
 
@@ -50,6 +49,9 @@ git_command = f"git diff --name-only HEAD~1 {last_commit_sha} -- '*.sql'"
 print(f"Executing command: {git_command}")
 
 changed_files = subprocess.check_output(git_command, shell=True).decode("utf-8").strip().split("\n")
+
+try:
+    cursor.execute("START TRANSACTION")
 
 for file in changed_files:
     
@@ -72,7 +74,7 @@ except Exception as e:
     print(f"Error: {e}")  
 
 finally:
-    
+
 # close the cursor and connection 
     cursor.close() 
     connection.close() 
