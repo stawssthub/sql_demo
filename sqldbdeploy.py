@@ -29,8 +29,8 @@ for x in cursor:
 
 changed_files = subprocess.check_output(['git', 'diff', '--name-only', 'HEAD^', 'HEAD'], universal_newlines=True)
 changed_files = [file.strip() for file in changed_files.split('\n') if file.endswith(".sql")]
-    for file_path in changed_files:
-        deploy_sql_changes(cursor, file_path)
+for file_path in changed_files:
+    deploy_sql_changes(cursor, file_path)
 
     # Commit changes
     connection.commit()
