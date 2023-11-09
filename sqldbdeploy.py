@@ -38,7 +38,7 @@ except subprocess.CalledProcessError as e:
         raise
 
 # Step 1: Identify changed SQL files
-changed_files = subprocess.check_output(['git', 'diff', '--name-only', 'HEAD~1..HEAD', '--', '*.sql'], text=True).splitlines()
+#changed_files = subprocess.check_output(['git', 'diff', '--name-only', 'HEAD~1..HEAD', '--', '*.sql'], text=True).splitlines()
 
 # Step 2: Execute changed SQL files
 for file in changed_files:
