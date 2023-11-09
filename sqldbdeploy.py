@@ -1,3 +1,4 @@
+#!/usr/bin/env vpython3
 import os
 import subprocess
 import mysql.connector
