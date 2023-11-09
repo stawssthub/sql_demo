@@ -9,7 +9,8 @@ USE sql12659958;
 /*INSERT INTO test_table(test_field) VALUES('test1');
 INSERT INTO test_table(test_field) VALUES('test2');
 INSERT INTO test_table(test_field) VALUES('test3');
-INSERT INTO test_table(test_field3) VALUES('test4');*/
-INSERT INTO test_table(test_field) VALUES('test8');
+INSERT INTO test_table(test_field3) VALUES('test4');
+INSERT INTO test_table(test_field) VALUES('test8');*/
+INSERT INTO test_table(test_field) VALUES('test9');
 
 
