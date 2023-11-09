@@ -13,12 +13,6 @@ db_params = {
     "password": os.getenv("DB_PASSWORD"),
 }
 
-#last_commit_sha = subprocess.check_output("git rev-parse HEAD", shell=True).decode("utf-8").strip()
-#changed_files = glob.glob('mysql/*.sql')
-
-# Iterate through the list of changed SQL files and print them
-#for file in changed_files:
-    #print(file)
     
 # Establish a database connection
 connection = mysql.connector.connect(**db_params)
@@ -37,6 +31,9 @@ for x in cursor:
 
 #directory_path = "mysql/"
 
+try:
+    cursor.execute("START TRANSACTION")
+
 # Use Git to get the list of changed SQL files
 #git_command = git diff --name-only HEAD~1 HEAD -- '*.sql'
 
@@ -50,10 +47,8 @@ print(f"Executing command: {git_command}")
 
 
 changed_files = subprocess.check_output(git_command, shell=True).decode("utf-8").strip().split("\n")
-finally:  
 
-try:
-    cursor.execute("START TRANSACTION")
+
 for file in changed_files:
    
     with open(file, "r") as sql_file:
@@ -67,9 +62,7 @@ for file in changed_files:
 # commit the changes to the database 
     connection.commit() 
 except Exception as e:
-
     # Handle exceptions, roll back the transaction, and log the error
-
     connection.rollback()
     print(f"Error: {e}")  
 
