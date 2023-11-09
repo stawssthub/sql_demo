@@ -38,7 +38,7 @@ try:
 #git_command = git diff --name-only HEAD~1 HEAD -- '*.sql'
 
 last_commit_sha = subprocess.check_output("git rev-parse HEAD", shell=True).decode("utf-8").strip()
-
+except Exception as p:
 print(f"last_commit: {last_commit_sha}")
 
 git_command = f"git diff --name-only HEAD~1 {last_commit_sha} -- '*.sql'"
