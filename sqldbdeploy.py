@@ -27,7 +27,7 @@ cursor.execute("SHOW TABLES")
 for x in cursor:
   print(x)
 
-    changed_files = subprocess.check_output(['git', 'diff', '--name-only', 'HEAD^', 'HEAD'], universal_newlines=True)
+changed_files = subprocess.check_output(['git', 'diff', '--name-only', 'HEAD^', 'HEAD'], universal_newlines=True)
     changed_files = [file.strip() for file in changed_files.split('\n') if file.endswith(".sql")]
 
     for file_path in changed_files:
