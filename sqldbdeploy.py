@@ -47,7 +47,7 @@ last_commit_sha = subprocess.check_output("git rev-parse HEAD", shell=True).deco
 
 #changed_files = subprocess.check_output(git_command, shell=True).decode("utf-8").strip().split("\n")
 
-changed_files = subprocess.check_output(f'git diff --name-only HEAD~1 {last_commit_sha} -- '*.sql'', shell=True).decode("utf-8").strip().split("\n")
+changed_files = subprocess.check_output(f"git diff --name-only HEAD~1 {last_commit_sha} -- '*.sql'", shell=True).decode("utf-8").strip().split("\n")
 #changed_files = glob.glob('*.sql')
 
 for file in changed_files:
