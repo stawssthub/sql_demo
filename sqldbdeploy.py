@@ -49,13 +49,13 @@ git_command = f"git diff --name-only HEAD~1 {last_commit_sha} -- '*.sql'"
 print(f"Executing command: {git_command}")
 
 
-    
 changed_files = subprocess.check_output(git_command, shell=True).decode("utf-8").strip().split("\n")
+finally:  
 
-
+try:
+    cursor.execute("START TRANSACTION")
 for file in changed_files:
-    try:
-        cursor.execute("START TRANSACTION")
+   
     with open(file, "r") as sql_file:
         #sql_statements = sql_file.read().split(';')  # Split SQL statements by semicolon
         result_iterator = cursor.execute(sql_file.read(), multi=True)
@@ -66,7 +66,6 @@ for file in changed_files:
             
 # commit the changes to the database 
     connection.commit() 
-
 except Exception as e:
 
     # Handle exceptions, roll back the transaction, and log the error
