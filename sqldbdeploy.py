@@ -46,7 +46,9 @@ for x in cursor:
 
 last_commit_sha = subprocess.check_output("git rev-parse HEAD", shell=True).decode("utf-8").strip()
 
-git_command = "git diff --name-only HEAD~1 {last_commit_sha} -- '*.sql'"
+print(f"last_commit: {last_commit_sha}")
+
+git_command = f"git diff --name-only HEAD~1 {last_commit_sha} -- '*.sql'"
 print(f"Executing command: {git_command}")
 changed_files = subprocess.check_output(git_command, shell=True).decode("utf-8").strip().split("\n")
 
