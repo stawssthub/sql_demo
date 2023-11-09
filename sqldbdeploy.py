@@ -34,17 +34,18 @@ for x in cursor:
 
 # Use Git to get the list of changed SQL files
 #git_command = git diff --name-only HEAD~1 HEAD -- '*.sql'
-
-last_commit_sha = subprocess.check_output("git rev-parse HEAD", shell=True).decode("utf-8").strip()
-
-print(f"last_commit: {last_commit_sha}")
-
-git_command = f"git diff --name-only HEAD~1 {last_commit_sha} -- '*.sql'"
-
-print(f"Executing command: {git_command}")
-
 try:
     cursor.execute("START TRANSACTION")
+    last_commit_sha = subprocess.check_output("git rev-parse HEAD", shell=True).decode("utf-8").strip()
+
+    print(f"last_commit: {last_commit_sha}")
+
+    git_command = f"git diff --name-only HEAD~1 {last_commit_sha} -- '*.sql'"
+
+    print(f"Executing command: {git_command}")
+
+#try:
+    #cursor.execute("START TRANSACTION")
     changed_files = subprocess.check_output(git_command, shell=True).decode("utf-8").strip().split("\n")
 
 
