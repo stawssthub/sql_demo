@@ -62,10 +62,13 @@ for file in changed_files:
     #script_path = os.path.join(directory_path, filename)
 
     with open(file, "r") as sql_file:
-        sql_statements = sql_file.read().split(';')  # Split SQL statements by semicolon
-        for sql_statement in sql_statements:
-        # Execute the SQL statement against the database
-            cursor.execute(sql_statement)
+        #sql_statements = sql_file.read().split(';')  # Split SQL statements by semicolon
+        result_iterator = cursor.execute(sql_file.read(), multi=True)
+        print(result_iterator)
+    for res in result_iterator:
+        print("Running query: ", res)  # Will print out a short representation of the query
+        print(f"Affected {res.rowcount} rows" )
+        
 # commit the changes to the database 
     connection.commit() 
 #except Exception as e:
