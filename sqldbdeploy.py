@@ -4,7 +4,7 @@ import mysql.connector
 import glob
 
 # Database connection parameters
-db_params = [{
+database_configs = [{
     "host": os.getenv("DB_HOST"),
     "port": os.getenv("DB_PORT"),
     "database": os.getenv("DB_NAME"),
@@ -39,7 +39,7 @@ db_params = [{
 
 # Use Git to get the list of changed SQL files
 #git_command = git diff --name-only HEAD~1 HEAD -- '*.sql'
-for config in db_params:
+for config in database_configs:
     try:
         connection = mysql.connector.connect(**config)
         cursor = connection.cursor()
