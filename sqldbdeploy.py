@@ -2,7 +2,7 @@ import os
 import subprocess
 import mysql.connector
 import glob
-import mysql.connector import pooling
+from mysql.connector import pooling
 
 # Database connection parameters
 database_configs = [{
