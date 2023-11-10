@@ -25,10 +25,7 @@ db_params = [{
 for databases in db_params:
     connection = mysql.connector.connect(**databases)
     cursor = connection.cursor()
-    # To get Hosts
-    cursor.execute("SHOW HOSTS")
-    for H in cursor:
-      print(H)
+
     # To get the list of databases
     cursor.execute("SHOW DATABASES")
     for D in cursor:
