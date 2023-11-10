@@ -30,4 +30,9 @@ jobs:
           DB_NAME: ${{ secrets.DB_NAME }}
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_HOST_2: ${{ secrets.DB_HOST_2 }}
+          DB_PORT_2: ${{ secrets.DB_PORT_2 }}
+          DB_NAME_2: ${{ secrets.DB_NAME_2 }}
+          DB_USER_2: ${{ secrets.DB_USER_2 }}
+          DB_PASSWORD_2: ${{ secrets.DB_PASSWORD_2 }}
         run: python sqldbdeploy.py
