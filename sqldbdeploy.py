@@ -23,7 +23,7 @@ db_params = [{
 
     
 # Establish a database connection
-for config in db_params;
+for config in db_params:
     connection = mysql.connector.connect(**config)
     cursor = connection.cursor()
 
