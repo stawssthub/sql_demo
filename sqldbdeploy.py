@@ -37,13 +37,14 @@ database_configs = [{
     #for T in cursor:
       #print(T)
 
-connection_pool = pooling.MYSQLConnectionPool(pool_name="pool", pool_size=5, **database_configs[0])
+connection_pool = pooling.MySQLConnectionPool(pool_name="pool", pool_size=5, **database_configs[0])
 
 # Use Git to get the list of changed SQL files
 #git_command = git diff --name-only HEAD~1 HEAD -- '*.sql'
 for config in database_configs:
     try:
-        connection = mysql.connector.connect(**config)
+        #connection = mysql.connector.connect(**config)
+        connection = connection_pool.get_connection()
         cursor = connection.cursor()
         
         last_commit_sha = subprocess.check_output("git rev-parse HEAD", shell=True).decode("utf-8").strip()
