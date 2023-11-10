@@ -47,16 +47,23 @@ try:
 #try:
     #cursor.execute("START TRANSACTION")
     changed_files = subprocess.check_output(git_command, shell=True).decode("utf-8").strip().split("\n")
-
-
+    
+    # Track executed statements
+    executed_statements = set()
+    
+    # Execute the content of each modified SQL file
     for file in changed_files:
        with open(file, "r") as sql_file:
         #sql_statements = sql_file.read().split(';')  # Split SQL statements by semicolon
-           result_iterator = cursor.execute(sql_file.read(), multi=True)
-           print(result_iterator)
-           for res in result_iterator:
-                print("Running query: ", res)  # Will print out a short representation of the query
-                print(f"Affected {res.rowcount} rows" )
+           #result_iterator = cursor.execute(sql_file.read(), multi=True)
+            sql_script = (sql_file.read(), multi=True)
+           # Split the script into statements
+            statements = [stmt.strip() for stmt in sql_script.split(';') if stmt.strip()]
+            # Execute only new statements
+            for stmt in statements:
+                if stmt not in executed_statements:
+                    cursor.execute(stmt)
+                    executed_statements.add(stmt)
             
 # commit the changes to the database 
     connection.commit()
