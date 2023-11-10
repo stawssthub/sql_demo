@@ -1,4 +1,3 @@
-
 import os
 import subprocess
 import mysql.connector
@@ -26,16 +25,15 @@ db_params = [{
 for config in db_params:
     connection = mysql.connector.connect(**config)
     cursor = connection.cursor()
+    # To get the list of databases
+    cursor.execute("SHOW DATABASES")
+    for D in cursor:
+      print(D)
 
-cursor.execute("SHOW DATABASES")
-
-for D in cursor:
-  print(D)
-    
-cursor.execute("SHOW TABLES")
-
-for x in cursor:
-  print(x)
+    # To get the list of Tables in databases
+    cursor.execute("SHOW TABLES")
+    for x in cursor:
+      print(x)
     
 
 #directory_path = "mysql/"
