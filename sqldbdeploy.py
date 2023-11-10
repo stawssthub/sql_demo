@@ -37,7 +37,7 @@ database_configs = [{
     #for T in cursor:
       #print(T)
 
-connection_pool = pooling.MySQLConnectionPool(pool_name="pool", pool_size=5, pool_reset_session=True, **database_configs[0])
+connection_pool = pooling.MySQLConnectionPool(pool_name="pool", pool_size=2, pool_reset_session=True, **database_configs[0])
 last_commit_sha = subprocess.check_output("git rev-parse HEAD", shell=True).decode("utf-8").strip()
 print(f"last_commit: {last_commit_sha}")
 
