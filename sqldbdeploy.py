@@ -56,7 +56,7 @@ try:
        with open(file, "r") as sql_file:
         #sql_statements = sql_file.read().split(';')  # Split SQL statements by semicolon
            #result_iterator = cursor.execute(sql_file.read(), multi=True)
-            sql_script = (sql_file.read(), multi=True)
+            sql_script = sql_file.read()
            # Split the script into statements
             statements = [stmt.strip() for stmt in sql_script.split(';') if stmt.strip()]
             # Execute only new statements
