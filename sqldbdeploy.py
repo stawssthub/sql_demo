@@ -70,10 +70,10 @@ for config in database_configs:
                     connection.commit()
         except Exception as e:
             connection.rollback()
-            print(f"Error in database {config['database']}: {e}")
+            print(f"Error: {e}")
             
     except mysql.connector.Error as e:
-        print(f
+        print(f"Error in database {config['database']}: {e}")
     finally:
 # close the cursor and connection 
         cursor.close() 
