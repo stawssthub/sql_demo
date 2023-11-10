@@ -11,14 +11,13 @@ database_configs = [{
     "user": os.getenv("DB_USER"),
     "password": os.getenv("DB_PASSWORD"),
 },
-
 {
     "host": os.getenv("DB_HOST_2"),
     "port": os.getenv("DB_PORT_2"),
     "database": os.getenv("DB_NAME_2"),
     "user": os.getenv("DB_USER_2"),
     "password": os.getenv("DB_PASSWORD_2"),
-}]
+},]
 
     
 # Establish a database connection
