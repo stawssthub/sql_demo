@@ -27,14 +27,14 @@ db_params = [{
     #cursor = connection.cursor()
 
     # To get the list of databases
-    cursor.execute("SHOW DATABASES")
-    for D in cursor:
-      print(D)
+    #cursor.execute("SHOW DATABASES")
+    #for D in cursor:
+      #print(D)
 
     # To get the list of Tables in databases
-    cursor.execute("SHOW TABLES")
-    for T in cursor:
-      print(T)
+    #cursor.execute("SHOW TABLES")
+    #for T in cursor:
+      #print(T)
 
 
 # Use Git to get the list of changed SQL files
