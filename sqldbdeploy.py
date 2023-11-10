@@ -67,7 +67,7 @@ for config in database_configs:
                     print(f"Affected {res.rowcount} rows" )
             
         # commit the changes to the database 
-                connection.commit()
+                    connection.commit()
         except Exception as e:
             connection.rollback()
             print(f"Error in database {config['database']}: {e}")
