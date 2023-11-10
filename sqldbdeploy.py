@@ -38,6 +38,11 @@ database_configs = [{
       #print(T)
 
 connection_pool = pooling.MySQLConnectionPool(pool_name="pool", pool_size=5, **database_configs[0])
+last_commit_sha = subprocess.check_output("git rev-parse HEAD", shell=True).decode("utf-8").strip()
+print(f"last_commit: {last_commit_sha}")
+
+git_command = f"git diff --name-only HEAD~1 {last_commit_sha} -- '*.sql'"
+print(f"Executing command: {git_command}")
 
 # Use Git to get the list of changed SQL files
 #git_command = git diff --name-only HEAD~1 HEAD -- '*.sql'
@@ -46,14 +51,6 @@ for config in database_configs:
         #connection = mysql.connector.connect(**config)
         connection = connection_pool.get_connection()
         cursor = connection.cursor()
-        
-        last_commit_sha = subprocess.check_output("git rev-parse HEAD", shell=True).decode("utf-8").strip()
-
-        print(f"last_commit: {last_commit_sha}")
-
-        git_command = f"git diff --name-only HEAD~1 {last_commit_sha} -- '*.sql'"
-
-        print(f"Executing command: {git_command}")
 
         try:
             cursor.execute("START TRANSACTION")
