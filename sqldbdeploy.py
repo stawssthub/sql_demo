@@ -5,7 +5,7 @@ import glob
 from mysql.connector import pooling
 
 # Database connection parameters
-database_configs = [{
+db_params = [{
     "host": os.getenv("DB_HOST"),
     "port": os.getenv("DB_PORT"),
     "database": os.getenv("DB_NAME"),
