@@ -3,82 +3,93 @@ import subprocess
 import mysql.connector
 import glob
 
+def get_latest_commit_sha():
+    # Use Git to get the SHA-1 hash of the latest commit
+    last_commit_sha = subprocess.check_output("git rev-parse HEAD", shell=True).decode("utf-8").strip()
+    return last_commit_sha
 
-def get_database_from_sql_file(mysql):
-    # Read the first few lines of the SQL file to find the database identifier
-    with open(mysql, 'r') as file:
-        lines = file.readlines()
+def get_changed_files_since_commit(commit_sha):
+    # Use Git to get the changed files since the specified commit
+    git_command = f"git diff --name-only {commit_sha} HEAD"
+    changes = subprocess.check_output(git_command, shell=True, universal_newlines=True)
+    return changes.strip().split('\n')
 
-    for line in lines:
-        if line.startswith('-- Database:'):
-            return line.split(':')[1].strip()
-
-    # If no database identifier is found, return None
-    return None
-
-def execute_sql_file_in_database(mysql, database_config):
+def execute_sql_file(mysql, connection):
     try:
-        connection = mysql.connector.connect(**database_config)
+        # Read SQL file
+        with open(mysql, 'r') as file:
+            sql_script = file.read()
+
+        # Split SQL statements
+        statements = [stmt.strip() for stmt in sql_script.split(';') if stmt.strip()]
+
+        # Create a cursor and execute SQL statements
         cursor = connection.cursor()
+        for statement in statements:
+            try:
+                cursor.execute(statement)
+                connection.commit()
+                print(f"Statement executed successfully: {statement}")
+            except Exception as e:
+                print(f"Error executing statement: {statement}\nError: {e}")
 
-        # Get the target database from the SQL file
-        target_database = get_database_from_sql_file(mysql)
-
-        if target_database:
-            # Use the specified database
-            cursor.execute(f"USE {target_database}")
-
-            # Read the SQL file and execute statements
-            with open(mysql, 'r') as file:
-                sql_script = file.read()
-
-            # Split SQL statements
-            statements = [stmt.strip() for stmt in sql_script.split(';') if stmt.strip()]
-
-            # Execute each statement
-            for statement in statements:
-                try:
-                    cursor.execute(statement)
-                    connection.commit()
-                    print(f"Statement executed successfully in {target_database}: {statement}")
-                except Exception as e:
-                    print(f"Error executing statement in {target_database}: {statement}\nError: {e}")
-
-    except mysql.connector.Error as err:
-        print(f"Error connecting to database or executing SQL file: {err}")
+    except Exception as e:
+        print(f"Error: {e}")
 
     finally:
-        # Close the cursor and connection
+        # Close the cursor
         if 'cursor' in locals() and cursor is not None:
             cursor.close()
 
-        if 'connection' in locals() and connection.is_connected():
-            connection.close()
+def deploy_to_databases(database_configurations, mysql):
+    # Get the SHA-1 hash of the latest commit
+    last_commit_sha = get_latest_commit_sha()
 
-# Specify your MySQL database configurations
-db_params = [
-    {
-        "host": os.getenv("DB_HOST"),
-        "port": os.getenv("DB_PORT"),
-        "user": os.getenv("DB_USER"),
-        "password": os.getenv("DB_PASSWORD"),
-    },
-    # Add more databases as needed
+    # Get the changed files since the last commit
+    changed_files = get_changed_files_since_commit(last_commit_sha)
+
+    for db_config in database_configurations:
+        try:
+            # Connect to the database
+            connection = mysql.connector.connect(**db_config)
+            print(f"\nConnected to database: {db_config['database']}")
+
+            # Loop through each changed SQL file
+            for filename in changed_files:
+                if filename.endswith(".sql"):
+                    sql_file_path = os.path.join(mysql, filename)
+                    print(f"\nExecuting SQL file: {sql_file_path}")
+                    execute_sql_file(sql_file_path, connection)
+
+        except mysql.connector.Error as err:
+            print(f"Error connecting to database: {db_config['database']}\nError: {err}")
+
+        finally:
+            # Close the connection
+            if connection.is_connected():
+                connection.close()
+                print(f"Disconnected from database: {db_config['database']}")
+
+if __name__ == "__main__":
+    # Specify your MySQL database configurations
+  database_configurations = [{
+    "host": os.getenv("DB_HOST"),
+    "port": os.getenv("DB_PORT"),
+    "database": os.getenv("DB_NAME"),
+    "user": os.getenv("DB_USER"),
+    "password": os.getenv("DB_PASSWORD"),
+},
+{
+    "host": os.getenv("DB_HOST_2"),
+    "port": os.getenv("DB_PORT_2"),
+    "database": os.getenv("DB_NAME_2"),
+    "user": os.getenv("DB_USER_2"),
+    "password": os.getenv("DB_PASSWORD_2"),
+},
 ]
 
-# Specify the directory containing your SQL files
-sql_files_directory = 'mysql/'
+    # Specify the directory containing your SQL files
+    sql_files_directory = 'mysql/'
 
-# Get the SHA-1 hash of the latest commit
-last_commit_sha = subprocess.check_output("git rev-parse HEAD", shell=True).decode("utf-8").strip()
-
-# Get the list of changed SQL files
-git_command = f"git diff --name-only HEAD~1 {last_commit_sha} -- '*.sql'"
-changed_files = subprocess.check_output(git_command, shell=True).decode("utf-8").strip().split("\n")
-
-# Deploy SQL files to each database
-for db_config in db_params:
-    for filename in changed_files:
-        if filename.endswith(".sql"):
-            sql_file_path = os.path.join(sql_files_directory, filename)
-            execute_sql_file_in_database(sql_file_path, db_config)
+    # Deploy SQL files to each database
+    deploy_to_databases(database_configurations, sql_files_directory)
