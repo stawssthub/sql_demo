@@ -4,7 +4,7 @@ import mysql.connector
 import glob
 
 
-def get_database_from_sql_file(mysql/):
+def get_database_from_sql_file(mysql):
     # Read the first few lines of the SQL file to find the database identifier
     with open(mysql, 'r') as file:
         lines = file.readlines()
