@@ -80,13 +80,6 @@ try:
         except mysql.connector.Error as err:
             print(f"Error connecting to database or executing SQL file: {err}")
 
-        finally:
-            # Close the cursor and connection
-            if 'cursor' in locals() and cursor is not None:
-                cursor.close()
-
-            if 'connection' in locals() and connection.is_connected():
-                connection.close()
 except Exception as e:
     connection.rollback()
 finally:
