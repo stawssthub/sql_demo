@@ -37,11 +37,11 @@ for databases in db_params:
     for T in cursor:
       print(T)
 
-last_commit_sha = subprocess.check_output("git rev-parse HEAD", shell=True).decode("utf-8").strip()
-print(f"last_commit: {last_commit_sha}")
+#last_commit_sha = subprocess.check_output("git rev-parse HEAD", shell=True).decode("utf-8").strip()
+#print(f"last_commit: {last_commit_sha}")
 
-git_command = f"git diff --name-only HEAD~1 {last_commit_sha} -- '*.sql'"
-print(f"Executing command: {git_command}")
+#git_command = f"git diff --name-only HEAD~1 {last_commit_sha} -- '*.sql'"
+#print(f"Executing command: {git_command}")
 
 # Use Git to get the list of changed SQL files
 #git_command = git diff --name-only HEAD~1 HEAD -- '*.sql'
