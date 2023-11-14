@@ -6,11 +6,11 @@ import glob
 # Database connection parameters
 db_params = [
     {
-        "host": os.getenv("DB_HOST"),
-        "port": os.getenv("DB_PORT"),
-        "database": os.getenv("sql12662061"),
-        "user": os.getenv("sql12662061"),
-        "password": os.getenv("lR7qTSsVuv"),
+        "host": "sql12.freesqldatabase.com",
+        "port": "3306",
+        "database": "sql12662061",
+        "user": "sql12662061",
+        "password": "lR7qTSsVuv",
     },
     {
         "host": os.getenv("DB_HOST_2"),
