@@ -4,9 +4,9 @@ import mysql.connector
 import glob
 
 
-def get_database_from_sql_file(mysql):
+def get_database_from_sql_file(mysql/):
     # Read the first few lines of the SQL file to find the database identifier
-    with open(mysql, 'r') as file:
+    with open(mysql/, 'r') as file:
         lines = file.readlines()
 
     for line in lines:
@@ -16,20 +16,20 @@ def get_database_from_sql_file(mysql):
     # If no database identifier is found, return None
     return None
 
-def execute_sql_file_in_database(mysql, database_config):
+def execute_sql_file_in_database(mysql/, database_config):
     try:
         connection = mysql.connector.connect(**database_config)
         cursor = connection.cursor()
 
         # Get the target database from the SQL file
-        target_database = get_database_from_sql_file(mysql)
+        target_database = get_database_from_sql_file(mysql/)
 
         if target_database:
             # Use the specified database
             cursor.execute(f"USE {target_database}")
 
             # Read the SQL file and execute statements
-            with open(mysql, 'r') as file:
+            with open(mysql/, 'r') as file:
                 sql_script = file.read()
 
             # Split SQL statements
