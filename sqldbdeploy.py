@@ -81,6 +81,9 @@ for file in changed_files:
         except Exception as e:
             connection.rollback()
             print(f"Error: {e}")
+        finally:
+            cursor.close()
+            connection.close()
 
     except mysql.connector.Error as err:
         print(f"Error connecting to database or executing SQL file: {err}")
