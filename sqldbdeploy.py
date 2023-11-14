@@ -50,39 +50,42 @@ for db_config in db_params:
 
         if 'connection' in locals() and connection.is_connected():
             connection.close()
-try:
-    cursor.execute("START TRANSACTION")
+
 # Get the list of changed SQL files
-    last_commit_sha = subprocess.check_output("git rev-parse HEAD", shell=True).decode("utf-8").strip()
-    print(f"Last commit: {last_commit_sha}")
+last_commit_sha = subprocess.check_output("git rev-parse HEAD", shell=True).decode("utf-8").strip()
+print(f"Last commit: {last_commit_sha}")
 
-    git_command = f"git diff --name-only HEAD~1 {last_commit_sha} -- '*.sql'"
-    print(f"Executing command: {git_command}")
+git_command = f"git diff --name-only HEAD~1 {last_commit_sha} -- '*.sql'"
+print(f"Executing command: {git_command}")
 
-    # Use Git to get the list of changed SQL files
-    changed_files = subprocess.check_output(git_command, shell=True).decode("utf-8").strip().split("\n")
+# Use Git to get the list of changed SQL files
+changed_files = subprocess.check_output(git_command, shell=True).decode("utf-8").strip().split("\n")
 
-    # Establish a database connection for each changed file and execute SQL statements
-    for file in changed_files:
+# Establish a database connection for each changed file and execute SQL statements
+for file in changed_files:
+    try:
+        connection = mysql.connector.connect(**db_config)  # Use the connection parameters for the appropriate database
+        cursor = connection.cursor()
+
         try:
-            connection = mysql.connector.connect(**db_config)  # Use the connection parameters for the appropriate database
-            cursor = connection.cursor()
+            cursor.execute("START TRANSACTION")
 
             with open(file, "r") as sql_file:
                 #sql_statements = sql_file.read().split(';')  # Split SQL statements by semicolon
                 result_iterator = cursor.execute(sql_file.read(), multi=True)
                 print(result_iterator)
                 for res in result_iterator:
-                     print("Running query: ", res)  # Will print out a short representation of the query
-                     print(f"Affected {res.rowcount} rows" )
-                connection.commit()
+                        print("Running query: ", res)  # Will print out a short representation of the query
+                        print(f"Affected {res.rowcount} rows" )
+            connection.commit()
+        except Exception as e:
+            connection.rollback()
+            print(f"Error: {e}")
 
-        except mysql.connector.Error as err:
-            print(f"Error connecting to database or executing SQL file: {err}")
+    except mysql.connector.Error as err:
+        print(f"Error connecting to database or executing SQL file: {err}")
 
-except Exception as e:
-    connection.rollback()
-finally:
+    finally:
     # close the cursor and connection 
     cursor.close()
     connection.close()
