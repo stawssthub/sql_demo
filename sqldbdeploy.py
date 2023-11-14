@@ -3,90 +3,46 @@ import subprocess
 import mysql.connector
 import glob
 
-# Database connection parameters
-db_params = [
-    {
-        "host": os.getenv("DB_HOST"),
-        "port": os.getenv("DB_PORT"),
-        "database": os.getenv("DB_NAME"),
-        "user": os.getenv("DB_USER"),
-        "password": os.getenv("DB_PASSWORD"),
-    },
-    {
-        "host": os.getenv("DB_HOST_2"),
-        "port": os.getenv("DB_PORT_2"),
-        "database": os.getenv("DB_NAME_2"),
-        "user": os.getenv("DB_USER_2"),
-        "password": os.getenv("DB_PASSWORD_2"),
-    },
-    # Add more databases as needed
-]
 
-# Establish a database connection for each database
-for db_config in db_params:
+def get_database_from_sql_file(mysql):
+    # Read the first few lines of the SQL file to find the database identifier
+    with open(mysql, 'r') as file:
+        lines = file.readlines()
+
+    for line in lines:
+        if line.startswith('-- Database:'):
+            return line.split(':')[1].strip()
+
+    # If no database identifier is found, return None
+    return None
+
+def execute_sql_file_in_database(mysql, database_config):
     try:
-        connection = mysql.connector.connect(**db_config)
-        print(f"\nConnected to database: {db_config['database']}")
+        connection = mysql.connector.connect(**database_config)
         cursor = connection.cursor()
 
-        # To get the list of databases
-        cursor.execute("SHOW DATABASES")
-        for database in cursor:
-            print(f"Database: {database[0]}")
+        # Get the target database from the SQL file
+        target_database = get_database_from_sql_file(mysql)
 
-        # To get the list of tables in the database
-        cursor.execute("SHOW TABLES")
-        for table in cursor:
-            print(f"Table: {table[0]}")
+        if target_database:
+            # Use the specified database
+            cursor.execute(f"USE {target_database}")
 
-        # Commit the changes to the database
-        connection.commit()
+            # Read the SQL file and execute statements
+            with open(mysql, 'r') as file:
+                sql_script = file.read()
 
-    except mysql.connector.Error as err:
-        print(f"Error connecting to database: {db_config['database']}\nError: {err}")
+            # Split SQL statements
+            statements = [stmt.strip() for stmt in sql_script.split(';') if stmt.strip()]
 
-    finally:
-        # Close the cursor and connection
-        if 'cursor' in locals() and cursor is not None:
-            cursor.close()
-
-        if 'connection' in locals() and connection.is_connected():
-            connection.close()
-
-# Get the list of changed SQL files
-last_commit_sha = subprocess.check_output("git rev-parse HEAD", shell=True).decode("utf-8").strip()
-print(f"Last commit: {last_commit_sha}")
-
-git_command = f"git diff --name-only HEAD~1 {last_commit_sha} -- '*.sql'"
-print(f"Executing command: {git_command}")
-
-# Use Git to get the list of changed SQL files
-changed_files = subprocess.check_output(git_command, shell=True).decode("utf-8").strip().split("\n")
-
-# Establish a database connection for each changed file and execute SQL statements
-for file in changed_files:
-    try:
-        connection = mysql.connector.connect(**db_config)  # Use the connection parameters for the appropriate database
-        print(f"\nConnected to database: {db_config['database']}")
-        cursor = connection.cursor()
-
-        try:
-            cursor.execute("START TRANSACTION")
-
-            with open(file, "r") as sql_file:
-                #sql_statements = sql_file.read().split(';')  # Split SQL statements by semicolon
-                result_iterator = cursor.execute(sql_file.read(), multi=True)
-                print(result_iterator)
-                for res in result_iterator:
-                        print("Running query: ", res)  # Will print out a short representation of the query
-                        print(f"Affected {res.rowcount} rows" )
-            connection.commit()
-        except Exception as e:
-            connection.rollback()
-            print(f"Error: {e}")
-        finally:
-            cursor.close()
-            connection.close()
+            # Execute each statement
+            for statement in statements:
+                try:
+                    cursor.execute(statement)
+                    connection.commit()
+                    print(f"Statement executed successfully in {target_database}: {statement}")
+                except Exception as e:
+                    print(f"Error executing statement in {target_database}: {statement}\nError: {e}")
 
     except mysql.connector.Error as err:
         print(f"Error connecting to database or executing SQL file: {err}")
@@ -98,3 +54,31 @@ for file in changed_files:
 
         if 'connection' in locals() and connection.is_connected():
             connection.close()
+
+# Specify your MySQL database configurations
+db_params = [
+    {
+        "host": os.getenv("DB_HOST"),
+        "port": os.getenv("DB_PORT"),
+        "user": os.getenv("DB_USER"),
+        "password": os.getenv("DB_PASSWORD"),
+    },
+    # Add more databases as needed
+]
+
+# Specify the directory containing your SQL files
+sql_files_directory = 'mysql/'
+
+# Get the SHA-1 hash of the latest commit
+last_commit_sha = subprocess.check_output("git rev-parse HEAD", shell=True).decode("utf-8").strip()
+
+# Get the list of changed SQL files
+git_command = f"git diff --name-only HEAD~1 {last_commit_sha} -- '*.sql'"
+changed_files = subprocess.check_output(git_command, shell=True).decode("utf-8").strip().split("\n")
+
+# Deploy SQL files to each database
+for db_config in db_params:
+    for filename in changed_files:
+        if filename.endswith(".sql"):
+            sql_file_path = os.path.join(sql_files_directory, filename)
+            execute_sql_file_in_database(sql_file_path, db_config)
