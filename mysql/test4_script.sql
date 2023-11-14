@@ -6,8 +6,8 @@ CREATE TABLE IF NOT EXISTS test_table4(
 )
 
 
-/*INSERT INTO test_table4(test_field) VALUES('test1');
-INSERT INTO test_table4(test_field) VALUES('test2');
-INSERT INTO test_table4(test_field) VALUES('test4');
-INSERT INTO test_table4(test_field) VALUES('test6');*/
+#INSERT INTO test_table4(test_field) VALUES('test1');
+#INSERT INTO test_table4(test_field) VALUES('test2');
+#INSERT INTO test_table4(test_field) VALUES('test4');
+#INSERT INTO test_table4(test_field) VALUES('test6');
 INSERT INTO test_table4(test_field) VALUES('test11');
