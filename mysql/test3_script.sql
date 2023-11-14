@@ -10,4 +10,4 @@ USE sql12659958;
 #INSERT INTO test_table3(test_field) VALUES('test2');
 #INSERT INTO test_table3(test_field) VALUES('test3');
 INSERT INTO test_table(test_field) VALUES('test8');*/
-INSERT INTO test_table3(test_field) VALUES('test9');
+INSERT INTO test_table3(test_field) VALUES('test5');
