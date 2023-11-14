@@ -86,6 +86,9 @@ for file in changed_files:
         print(f"Error connecting to database or executing SQL file: {err}")
 
     finally:
-    # close the cursor and connection 
-    cursor.close()
-    connection.close()
+        # Close the cursor and connection
+        if 'cursor' in locals() and cursor is not None:
+            cursor.close()
+
+        if 'connection' in locals() and connection.is_connected():
+            connection.close()
