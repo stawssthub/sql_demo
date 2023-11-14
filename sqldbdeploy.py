@@ -2,80 +2,88 @@ import os
 import subprocess
 import mysql.connector
 import glob
-from mysql.connector import pooling
 
 # Database connection parameters
-db_params = [{
-    "host": os.getenv("DB_HOST"),
-    "port": os.getenv("DB_PORT"),
-    "database": os.getenv("DB_NAME"),
-    "user": os.getenv("DB_USER"),
-    "password": os.getenv("DB_PASSWORD"),
-},
-{
-    "host": os.getenv("DB_HOST_2"),
-    "port": os.getenv("DB_PORT_2"),
-    "database": os.getenv("DB_NAME_2"),
-    "user": os.getenv("DB_USER_2"),
-    "password": os.getenv("DB_PASSWORD_2"),
-},
+db_params = [
+    {
+        "host": os.getenv("DB_HOST"),
+        "port": os.getenv("DB_PORT"),
+        "database": os.getenv("DB_NAME"),
+        "user": os.getenv("DB_USER"),
+        "password": os.getenv("DB_PASSWORD"),
+    },
+    {
+        "host": os.getenv("DB_HOST_2"),
+        "port": os.getenv("DB_PORT_2"),
+        "database": os.getenv("DB_NAME_2"),
+        "user": os.getenv("DB_USER_2"),
+        "password": os.getenv("DB_PASSWORD_2"),
+    },
 ]
 
-    
-# Establish a database connection
-for databases in db_params:
-    connection = mysql.connector.connect(**databases)
-    cursor = connection.cursor()
+# Establish a database connection for each database
+for db_config in db_params:
+    try:
+        connection = mysql.connector.connect(**db_config)
+        cursor = connection.cursor()
 
-    # To get the list of databases
-    cursor.execute("SHOW DATABASES")
-    for D in cursor:
-      print(D)
+        # To get the list of databases
+        cursor.execute("SHOW DATABASES")
+        for database in cursor:
+            print(f"Database: {database[0]}")
 
-    # To get the list of Tables in databases
-    cursor.execute("SHOW TABLES")
-    for T in cursor:
-      print(T)
+        # To get the list of tables in the database
+        cursor.execute("SHOW TABLES")
+        for table in cursor:
+            print(f"Table: {table[0]}")
 
+        # Commit the changes to the database
+        connection.commit()
+
+    except mysql.connector.Error as err:
+        print(f"Error connecting to database: {db_config['database']}\nError: {err}")
+
+    finally:
+        # Close the cursor and connection
+        if 'cursor' in locals() and cursor is not None:
+            cursor.close()
+
+        if 'connection' in locals() and connection.is_connected():
+            connection.close()
+
+# Get the list of changed SQL files
 last_commit_sha = subprocess.check_output("git rev-parse HEAD", shell=True).decode("utf-8").strip()
-print(f"last_commit: {last_commit_sha}")
+print(f"Last commit: {last_commit_sha}")
 
 git_command = f"git diff --name-only HEAD~1 {last_commit_sha} -- '*.sql'"
 print(f"Executing command: {git_command}")
 
 # Use Git to get the list of changed SQL files
-#git_command = git diff --name-only HEAD~1 HEAD -- '*.sql'
+changed_files = subprocess.check_output(git_command, shell=True).decode("utf-8").strip().split("\n")
 
-try:
-    cursor.execute("START TRANSACTION")
-    last_commit_sha = subprocess.check_output("git rev-parse HEAD", shell=True).decode("utf-8").strip()
+# Establish a database connection for each changed file and execute SQL statements
+for file in changed_files:
+    try:
+        connection = mysql.connector.connect(**db_config)  # Use the connection parameters for the appropriate database
+        cursor = connection.cursor()
 
-    print(f"last_commit: {last_commit_sha}")
+        with open(file, "r") as sql_file:
+            sql_statements = sql_file.read().split(';')  # Split SQL statements by semicolon
+            for statement in sql_statements:
+                try:
+                    cursor.execute(statement)
+                    connection.commit()
+                    print(f"Statement executed successfully: {statement}")
+                except Exception as e:
+                    print(f"Error executing statement: {statement}\nError: {e}")
 
-    git_command = f"git diff --name-only HEAD~1 {last_commit_sha} -- '*.sql'"
+    except mysql.connector.Error as err:
+        print(f"Error connecting to database or executing SQL file: {err}")
 
-    print(f"Executing command: {git_command}")
+    finally:
+        # Close the cursor and connection
+        if 'cursor' in locals() and cursor is not None:
+            cursor.close()
 
-#try:
-    #cursor.execute("START TRANSACTION")
-    changed_files = subprocess.check_output(git_command, shell=True).decode("utf-8").strip().split("\n")
-
-
-    for file in changed_files:
-       with open(file, "r") as sql_file:
-        #sql_statements = sql_file.read().split(';')  # Split SQL statements by semicolon
-           result_iterator = cursor.execute(sql_file.read(), multi=True)
-           print(result_iterator)
-           for res in result_iterator:
-                print("Running query: ", res)  # Will print out a short representation of the query
-                print(f"Affected {res.rowcount} rows" )
-            
-# commit the changes to the database 
-    connection.commit()
-except Exception as e:
-    connection.rollback()
-    print(f"Error: {e}")
-finally:
-# close the cursor and connection 
-    cursor.close() 
-    connection.close()
+        if 'connection' in locals() and connection.is_connected():
+            connection.close()
