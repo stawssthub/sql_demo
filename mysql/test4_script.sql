@@ -11,3 +11,4 @@ INSERT INTO test_table4(test_field) VALUES('test2');
 INSERT INTO test_table4(test_field) VALUES('test4');
 INSERT INTO test_table4(test_field) VALUES('test6');*/
 INSERT INTO test_table4(test_field) VALUES('test19');
+INSERT INTO test_table4(test_field) VALUES('test11');
