@@ -9,4 +9,4 @@ CREATE TABLE IF NOT EXISTS test_table6(
 #INSERT INTO test_table6(test_field) VALUES('test1');
 #INSERT INTO test_table6(test_field) VALUES('test2');
 #INSERT INTO test_table6(test_field) VALUES('test3');
-INSERT INTO test_table6(test_field) VALUES('test9');
+INSERT INTO test_table6(test_field) VALUES('test6');
