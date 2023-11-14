@@ -1,4 +1,4 @@
--- Database: sql12660740
+use sql12660740;
 
 CREATE TABLE IF NOT EXISTS test_table6(
         id INT PRIMARY KEY AUTO_INCREMENT,
