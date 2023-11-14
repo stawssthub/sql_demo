@@ -12,19 +12,20 @@ db_params = [
         "user": os.getenv("DB_USER"),
         "password": os.getenv("DB_PASSWORD"),
     },
-    #{
-        #"host": os.getenv("DB_HOST_2"),
-        #"port": os.getenv("DB_PORT_2"),
-        #"database": os.getenv("DB_NAME_2"),
-        #"user": os.getenv("DB_USER_2"),
-        #"password": os.getenv("DB_PASSWORD_2"),
-    #},
+    {
+        "host": os.getenv("DB_HOST_2"),
+        "port": os.getenv("DB_PORT_2"),
+        "database": os.getenv("DB_NAME_2"),
+        "user": os.getenv("DB_USER_2"),
+        "password": os.getenv("DB_PASSWORD_2"),
+    },
 ]
 
 # Establish a database connection for each database
 for db_config in db_params:
     try:
         connection = mysql.connector.connect(**db_config)
+        print(f"\nConnected to database: {db_config['database']}")
         cursor = connection.cursor()
 
         # To get the list of databases
@@ -65,6 +66,7 @@ changed_files = subprocess.check_output(git_command, shell=True).decode("utf-8")
 for file in changed_files:
     try:
         connection = mysql.connector.connect(**db_config)  # Use the connection parameters for the appropriate database
+        print(f"\nConnected to database: {db_config['database']}")
         cursor = connection.cursor()
 
         try:
