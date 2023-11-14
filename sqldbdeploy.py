@@ -76,7 +76,8 @@ for file in changed_files:
 
             with open(file, "r") as sql_file:
                 print(f"Executing SQL file: {file}")
-                print(f"Target Database: {db_config['database']}")
+                #print(f"Target Database: {db_config['database']}")
+                print(f"Target Database: {db_config.get('database', 'Unknown Database')}")
                 #sql_statements = sql_file.read().split(';')  # Split SQL statements by semicolon
                 result_iterator = cursor.execute(sql_file.read(), multi=True)
                 print(result_iterator)
