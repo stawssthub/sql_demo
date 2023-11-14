@@ -68,14 +68,13 @@ for file in changed_files:
         cursor = connection.cursor()
 
         with open(file, "r") as sql_file:
-            sql_statements = sql_file.read().split(';')  # Split SQL statements by semicolon
-            for statement in sql_statements:
-                try:
-                    cursor.execute(statement)
+            #sql_statements = sql_file.read().split(';')  # Split SQL statements by semicolon
+            result_iterator = cursor.execute(sql_file.read(), multi=True)
+            print(result_iterator)
+            for res in result_iterator:
+                 print("Running query: ", res)  # Will print out a short representation of the query
+                 print(f"Affected {res.rowcount} rows" )
                     connection.commit()
-                    print(f"Statement executed successfully: {statement}")
-                except Exception as e:
-                    print(f"Error executing statement: {statement}\nError: {e}")
 
     except mysql.connector.Error as err:
         print(f"Error connecting to database or executing SQL file: {err}")
