@@ -1,13 +1,27 @@
 name: Incremental SQL Deployment test7
 
+run-name: Setting up the  database
 on:
+  workflow_dispatch:
+    inputs:
+      fail-on:
+        description:  ""
+        required:  true
+        default:  "None"
+        options:
+          -  "None"
+          -  "dev"
+          -  "test"
+          -  "uat"
+          -  "prod"
   push:
     branches:
-      - test7  # Replace with your branch name
+    -  test7
 
 jobs:
   deploy_to_dev:
     runs-on: ubuntu-latest
+    environment:  dev
 
     steps:
       - name: Checkout code
