@@ -74,7 +74,7 @@ for file in changed_files:
             for res in result_iterator:
                  print("Running query: ", res)  # Will print out a short representation of the query
                  print(f"Affected {res.rowcount} rows" )
-                    connection.commit()
+            connection.commit()
 
     except mysql.connector.Error as err:
         print(f"Error connecting to database or executing SQL file: {err}")
