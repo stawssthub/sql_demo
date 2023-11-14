@@ -66,7 +66,7 @@ changed_files = subprocess.check_output(git_command, shell=True).decode("utf-8")
 # Establish a database connection for each changed file and execute SQL statements
 for file in changed_files:
     try:
-        for db_config in db_params: 
+         
         connection = mysql.connector.connect(**db_config)  # Use the connection parameters for the appropriate database
         print(f"\nConnected to database: {db_config['database']}")
         cursor = connection.cursor()
@@ -75,6 +75,8 @@ for file in changed_files:
             cursor.execute("START TRANSACTION")
 
             with open(file, "r") as sql_file:
+                print(f"Executing SQL file: {file}")
+                print(f"Target Database: {db_config['database']}")
                 #sql_statements = sql_file.read().split(';')  # Split SQL statements by semicolon
                 result_iterator = cursor.execute(sql_file.read(), multi=True)
                 print(result_iterator)
@@ -82,6 +84,7 @@ for file in changed_files:
                         print("Running query: ", res)  # Will print out a short representation of the query
                         print(f"Affected {res.rowcount} rows" )
             connection.commit()
+            print("Execution complete")
         except Exception as e:
             connection.rollback()
             print(f"Error: {e}")
