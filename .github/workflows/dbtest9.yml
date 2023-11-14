@@ -1,4 +1,4 @@
-name: Incremental SQL Deployment test4
+name: Incremental SQL Deployment test9
 
 run-name: Setting up the  database
 on:
@@ -16,7 +16,7 @@ on:
           -  "prod"
   push:
     branches:
-    -  test4
+    -  test9
 
 jobs:
   deploy_to_dev:
