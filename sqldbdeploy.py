@@ -13,11 +13,11 @@ db_params = [
         "password": "lR7qTSsVuv",
     },
     {
-        "host": os.getenv("DB_HOST_2"),
-        "port": os.getenv("DB_PORT_2"),
-        "database": os.getenv("DB_NAME_2"),
-        "user": os.getenv("DB_USER_2"),
-        "password": os.getenv("DB_PASSWORD_2"),
+        "host": "sql12.freesqldatabase.com",
+        "port": "3306",
+        "database": "sql12660740",
+        "user": "sql12660740",
+        "password": "srXYV5vv6M",
     },
     # Add more databases as needed
 ]
