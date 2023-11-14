@@ -89,7 +89,7 @@ if __name__ == "__main__":
 ]
 
     # Specify the directory containing your SQL files
-    sql_files_directory = 'mysql'
+        sql_files_directory = 'mysql'
 
     # Deploy SQL files to each database
-    deploy_to_databases(database_configurations, sql_files_directory)
+        deploy_to_databases(database_configurations, sql_files_directory)
