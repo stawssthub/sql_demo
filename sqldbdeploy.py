@@ -66,6 +66,7 @@ changed_files = subprocess.check_output(git_command, shell=True).decode("utf-8")
 # Establish a database connection for each changed file and execute SQL statements
 for file in changed_files:
     try:
+        for db_config in db_params: 
         connection = mysql.connector.connect(**db_config)  # Use the connection parameters for the appropriate database
         print(f"\nConnected to database: {db_config['database']}")
         cursor = connection.cursor()
