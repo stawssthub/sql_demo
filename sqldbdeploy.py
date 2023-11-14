@@ -19,6 +19,7 @@ db_params = [
         "user": os.getenv("DB_USER_2"),
         "password": os.getenv("DB_PASSWORD_2"),
     },
+    # add more databases here 
 ]
 
 # Establish a database connection for each database
