@@ -64,40 +64,53 @@ print(f"Executing command: {git_command}")
 changed_files = subprocess.check_output(git_command, shell=True).decode("utf-8").strip().split("\n")
 
 # Establish a database connection for each changed file and execute SQL statements
-for db_config in db_params:
-    for file in changed_files:
-        try:
-            connection = mysql.connector.connect(**db_config)  # Use the connection parameters for the appropriate database
-            print(f"\nConnected to database: {db_config['database']}")
-            cursor = connection.cursor()
+for file in changed_files:
+    try:
+        with open(file, "r") as sql_file:
+            sql_content = sql_file.read()
 
-            try:
-                cursor.execute("START TRANSACTION")
+            # Extract the database name from the SQL content
+            lines = sql_content.split("\n")
+            for line in lines:
+                if line.startswith("USE"):
+                    database_name = line.split()[1].strip(";")
+                    break
+            else:
+                raise ValueError("Database name not found in the SQL file.")
 
-                with open(file, "r") as sql_file:
+            # Find the database configuration based on the extracted database name
+            db_config = next((config for config in db_params if config["database"] == database_name), None)
+            if db_config is None:
+                raise ValueError(f"Database configuration not found for database: {database_name}")
+
+            # Connect to the database and execute SQL statements only if there are changes
+            if db_config and file:
+                connection = mysql.connector.connect(**db_config)
+                print(f"\nConnected to database: {database_name}")
+                cursor = connection.cursor()
+
+                try:
+                    cursor.execute("START TRANSACTION")
                     print(f"Executing SQL file: {file}")
-                    print(f"Target Database: {db_config.get('database', 'Unknown Database')}")
-                    result_iterator = cursor.execute(sql_file.read(), multi=True)
+                    result_iterator = cursor.execute(sql_content, multi=True)
                     print(result_iterator)
                     for res in result_iterator:
                         print("Running query: ", res)  # Will print out a short representation of the query
-                        print(f"Affected {res.rowcount} rows" )
-                connection.commit()
-                print("Execution complete")
-            except Exception as e:
-                connection.rollback()
-                print(f"Error: {e}")
-            finally:
-                cursor.close()
-                connection.close()
+                        print(f"Affected {res.rowcount} rows")
 
-        except mysql.connector.Error as err:
-            print(f"Error connecting to database or executing SQL file: {err}")
+                    connection.commit()
+                    print("Execution complete")
 
-        finally:
-            # Close the cursor and connection
-            if 'cursor' in locals() and cursor is not None:
-                cursor.close()
+                except Exception as e:
+                    connection.rollback()
+                    print(f"Error: {e}")
 
-            if 'connection' in locals() and connection.is_connected():
-                connection.close()
+                finally:
+                    cursor.close()
+                    connection.close()
+
+    except mysql.connector.Error as err:
+        print(f"Error connecting to database or executing SQL file: {err}")
+
+    except Exception as e:
+        print(f"Error: {e}")
