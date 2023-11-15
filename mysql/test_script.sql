@@ -7,5 +7,5 @@ CREATE TABLE IF NOT EXISTS test_table(
 
 
 #INSERT INTO test_table(test_field) VALUES('test1');
-INSERT INTO test_table(test_field) VALUES('test2');
+INSERT INTO test_table(test_field) VALUES('test3');
 
