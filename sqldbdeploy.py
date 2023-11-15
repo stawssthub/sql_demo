@@ -64,8 +64,12 @@ print(f"Executing command: {git_command}")
 changed_files = subprocess.check_output(git_command, shell=True).decode("utf-8").strip().split("\n")
 
 # Associate each SQL file with the corresponding database configuration dynamically
+#sql_files_and_databases = {
+    #file: db_params[i % len(db_params)] for i, file in enumerate(changed_files)
+#}
+
 sql_files_and_databases = {
-    file: db_params[i % len(db_params)] for i, file in enumerate(changed_files)
+    file: db_params[0] for file in changed_files  # Adjust the index as needed
 }
 
 # Establish a database connection for each changed file and execute SQL statements
