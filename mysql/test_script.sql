@@ -1,16 +1,11 @@
-USE sql12659958;
+USE sql12662061;
 
-/*CREATE TABLE test_table(
+CREATE TABLE IF NOT EXISTS test_table(
         id INT PRIMARY KEY AUTO_INCREMENT,
         test_field VARCHAR(250) NOT NULL DEFAULT ''
-);*/
+); 
 
 
-/*INSERT INTO test_table(test_field) VALUES('test1');
+#INSERT INTO test_table(test_field) VALUES('test1');
 INSERT INTO test_table(test_field) VALUES('test2');
-INSERT INTO test_table(test_field) VALUES('test3');
-INSERT INTO test_table(test_field3) VALUES('test4');
-INSERT INTO test_table(test_field) VALUES('test8');*/
-INSERT INTO test_table(test_field) VALUES('test9');
-
 
